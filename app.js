@@ -28,14 +28,14 @@ app.use(middleware.requestLogger);
 
 app.post("/terminate", async (req, res, next) => {
   try {
-
+    const projectId = req.body["projectId"];
     pm2.connect((err) => {
       if (err) {
         console.error(err);
         throw new AppError("Error while connecting to PM2 daemon", 500);
       }
       
-      pm2.delete(0, (err) => {
+      pm2.delete(projectId, (err) => {
         pm2.disconnect();
         if (err) {
           console.error(err);
