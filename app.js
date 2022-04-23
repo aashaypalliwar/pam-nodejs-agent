@@ -27,6 +27,10 @@ app.use(cookieParser());
 
 app.use(middleware.requestLogger);
 
+app.get("/status", async (req, res, next) => {
+  res.send( {"status": "active"} );
+});
+
 app.post("/terminate", async (req, res, next) => {
   try {
     const projectId = req.body["projectId"];
