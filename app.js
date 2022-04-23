@@ -4,13 +4,14 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const middleware = require('./utils/middleware');
-const {APP_DIR} = require('./utils/config');
+const { APP_DIR, OUT_LOG } = require('./utils/config');
 
 const app = express();
 const pm2 = require('pm2');
 const git = require('isomorphic-git')
 const http = require('isomorphic-git/http/node')
 const fs = require('fs')
+const fsExtra = require('fs-extra')
 const { execSync } = require("child_process");
 const AppError = require('./utils/appError');
 
@@ -41,6 +42,7 @@ app.post("/terminate", async (req, res, next) => {
           console.error(err);
           throw new AppError("Error while deleting existing process", 500);
         } else {
+          fsExtra.emptyDirSync(APP_DIR);
           console.log("App killed successfully");
           res.sendStatus(200);
         }
@@ -74,7 +76,9 @@ app.post("/deploy", async (req, res, next) => {
 
       pm2.start({
         script: APP_DIR + "/" + entryPoint,
-        name: projectId
+        name: projectId,
+        out_file: OUT_LOG,
+        error_file: OUT_LOG
       }, (err, apps) => {
         pm2.disconnect();
         if (err) {
@@ -121,7 +125,9 @@ app.post("/update", async (req, res, next) => {
 
         pm2.start({
           script: APP_DIR + "/" + entryPoint,
-          name: projectId
+          name: projectId,
+          out_file: OUT_LOG,
+          error_file: OUT_LOG
         }, (err, apps) => {
           pm2.disconnect();
           if (err) {

@@ -8,6 +8,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "fs-extra": "^10.1.0",
     "helmet": "^3.21.2",
     "hpp": "^0.2.3",
     "isomorphic-git": "^1.17.1",
