@@ -67,9 +67,7 @@ app.post("/deploy", async (req, res, next) => {
 
     await git.clone({ fs, http, dir: APP_DIR, url: githubUrl}).then(() => console.log("Successful cloning"));
 
-    execSync("cd " + APP_DIR);
-    execSync("npm install");
-
+    console.log(execSync("cd " + APP_DIR + "; npm install").toString());
     console.log("Installed dependencies");
 
     pm2.connect( (err) => {
@@ -110,8 +108,7 @@ app.post("/update", async (req, res, next) => {
     await git.pull({ fs, http, dir: APP_DIR, author: {name: "PAM", email: "palliwar.aashay@gmail.com"}, ref: "main", singleBranch: true, url: githubUrl });
     console.log("Successful pull");
 
-    execSync("cd " + APP_DIR);
-    execSync("npm install");
+    console.log(execSync("cd " + APP_DIR + "; npm install").toString());
     console.log("Installed dependencies");
 
     pm2.connect( (err) => {
