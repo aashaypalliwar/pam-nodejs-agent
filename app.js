@@ -59,46 +59,6 @@ app.post("/terminate", async (req, res, next) => {
   }
 })
 
-app.post("/deploy", async (req, res, next) => {
-  try {
-    const githubUrl = req.body["githubUrl"];
-    const entryPoint = req.body["entryPoint"];
-    const projectId = req.body["projectId"];
-
-    await git.clone({ fs, http, dir: APP_DIR, url: githubUrl}).then(() => console.log("Successful cloning"));
-
-    console.log(execSync("cd " + APP_DIR + "; npm install").toString());
-    console.log("Installed dependencies");
-
-    pm2.connect( (err) => {
-      if (err) {
-        console.error(err)
-        throw new AppError("Error while connecting to PM2 daemon", 500);
-      }
-
-      pm2.start({
-        script: APP_DIR + "/" + entryPoint,
-        name: projectId,
-        out_file: OUT_LOG,
-        error_file: OUT_LOG
-      }, (err, apps) => {
-        pm2.disconnect();
-        if (err) {
-          console.error(err);
-          throw new AppError("Error while starting process", 500);
-        } else {
-          console.log("App started successfully");
-          res.sendStatus(200);
-        }
-      })
-    })
-    
-  } catch(ex){
-    console.log(ex);
-    next(ex);
-  }
-})
-
 app.post("/update", async (req, res, next) => {
   try {
     const githubUrl = req.body["githubUrl"];

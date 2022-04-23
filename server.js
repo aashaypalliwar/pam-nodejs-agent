@@ -3,9 +3,13 @@ const app = require('./app');
 const config = require('./utils/config');
 
 const server = http.createServer(app);
+const { initializeApp } = require('./initapp');
 
-console.log("Starting app..");
+console.log("Initializing PAM NodeJS app..");
 
-server.listen(config.PORT,()=>{
-  console.log(`Server is running on port ${config.PORT}`)
+initializeApp().then(() => {
+  server.listen(config.PORT,()=>{
+    console.log(`Agent is running on port ${config.PORT}`)
+  });
 });
+
