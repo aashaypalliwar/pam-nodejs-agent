@@ -41,7 +41,7 @@ const initializeApp = async () => {
     
   } catch(ex){
     console.log(ex);
-    exit(2);
+    process.exit(1);
   }
 }
 
