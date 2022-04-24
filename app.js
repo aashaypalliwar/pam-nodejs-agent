@@ -59,11 +59,12 @@ app.post("/terminate", async (req, res, next) => {
   }
 })
 
-app.post("/update", async (req, res, next) => {
+app.patch("/update", async (req, res, next) => {
   try {
-    const githubUrl = req.body["githubUrl"];
-    const entryPoint = req.body["entryPoint"];
-    const projectId = req.body["projectId"];
+
+    const githubUrl = config.GITHUB_URL;
+    const entryPoint = config.ENTRY_FILE;
+    const projectId = config.PROJECT_ID;
 
     await git.pull({ fs, http, dir: APP_DIR, author: {name: "PAM", email: "palliwar.aashay@gmail.com"}, ref: "main", singleBranch: true, url: githubUrl });
     console.log("Successful pull");
