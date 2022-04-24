@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 const middleware = require('./utils/middleware');
-const { APP_DIR, OUT_LOG } = require('./utils/config');
+const { APP_DIR, OUT_LOG, GITHUB_URL, PROJECT_ID, ENTRY_FILE } = require('./utils/config');
 
 const app = express();
 const pm2 = require('pm2');
@@ -62,9 +62,9 @@ app.post("/terminate", async (req, res, next) => {
 app.patch("/update", async (req, res, next) => {
   try {
 
-    const githubUrl = config.GITHUB_URL;
-    const entryPoint = config.ENTRY_FILE;
-    const projectId = config.PROJECT_ID;
+    const githubUrl = GITHUB_URL;
+    const entryPoint = ENTRY_FILE;
+    const projectId = PROJECT_ID;
 
     await git.pull({ fs, http, dir: APP_DIR, author: {name: "PAM", email: "palliwar.aashay@gmail.com"}, ref: "main", singleBranch: true, url: githubUrl });
     console.log("Successful pull");
